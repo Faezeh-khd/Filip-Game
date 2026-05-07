@@ -1,0 +1,175 @@
+@use 'fonts'
+@use 'variables'
+@use 'mixins'
+
+//base    
+body
+    font-family: fonts.$font-main
+    background: variables.$color-bg
+
+.app
+    direction: rtl
+    min-height: 100vh
+    @include mixins.flex-column-center
+
+.header
+    margin-top: 40px
+    text-align: center
+    h1
+        background: linear-gradient(90deg, #ff8a00, #ff3d77)
+        -webkit-background-clip: text
+        -webkit-text-fill-color: transparent
+
+.game-container
+    @include mixins.flex-column-center
+
+.game-result
+    margin-top: 24px
+    text-align: center
+
+p
+    font-size: 18px
+    margin-bottom: 12px
+
+.success
+    color: variables.$color-success
+
+.fail
+    color: variables.$color-error
+
+button
+    padding: 10px 20px
+    border: none
+    border-radius: 8px
+    background: variables.$color-primary
+    color: black
+    cursor: pointer
+    font-family: inherit
+    font-weight: 600
+    transition: 0.2s
+    &:active
+        transform: scale(0.95)
+    &:hover
+        background: variables.$color-primary-hover
+
+//game board
+.board
+    @include mixins.flex-column-center
+
+.game-info
+    display: flex
+    gap: 30px
+    margin-bottom: 20px
+    font-size: 15px
+
+.grid
+    display: grid
+    grid-template-columns: repeat(4, 80px)
+    gap: 12px
+
+//result modal
+.modal-overlay
+    position: fixed
+    inset: 0
+    background: rgba(0,0,0,0.45)
+    @include mixins.flex-center
+    z-index: 100
+
+.modal
+    background: white
+    padding: 24px 32px
+    border-radius: 14px
+    text-align: center
+    min-width: 280px
+    box-shadow: 0 10px 25px rgba(0,0,0,.2)
+
+.record
+    margin: 16px 0
+
+.close-btn
+    padding: 8px 16px
+    cursor: pointer
+
+//filip card
+.flip-card
+    width: 80px
+    height: 80px
+    perspective: 1000px
+    cursor: pointer
+    transition: transform .25s ease
+
+    &:not(.disabled):hover
+        transform: scale(1.06)
+        .flip-card__front
+            background: linear-gradient(135deg, #ff8f3a, #ff5a8f)
+
+    &__inner
+        width: 100%
+        height: 100%
+        position: relative
+        transform-style: preserve-3d
+        transition: transform 0.6s ease
+
+    &.is-flipped &__inner
+        transform: rotateY(180deg)
+
+    &__front,
+    &__back
+        position: absolute
+        inset: 0
+        @include mixins.flex-center
+        backface-visibility: hidden
+        border-radius: 12px
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)
+
+    &__front
+        background: linear-gradient(135deg, #ff7a18, #ff3d77)
+        color: white
+        font-size: 32px
+        font-weight: bold
+
+    &__back
+        transform: rotateY(180deg)
+        .image-wrapper
+            position: relative
+            width: 100%
+            height: 100%
+            border-radius: 8px
+            overflow: hidden
+            img
+                width: 100%
+                height: 100%
+                object-fit: cover
+                border-radius: 8px
+                display: block
+    &.disabled
+        filter: grayscale(0.6)
+        cursor: not-allowed
+    &.is-matched
+        cursor: default
+        pointer-events: none
+        .image-wrapper::before
+            content: ""
+            position: absolute
+            top: -100%
+            left: -100%
+            width: 200%
+            height: 200%
+            transform: rotate(25deg)
+            animation: shine 0.8s ease-in-out forwards
+            pointer-events: none
+            background: linear-gradient(
+                120deg,
+                rgba(255, 255, 255, 0) 40%,
+                rgba(255, 255, 255, 0.7) 50%,
+                rgba(255, 255, 255, 0) 60%
+            )
+
+@keyframes shine
+    from
+        top: -100%
+        left: -100%
+
+    to
+        top: 100%
+        left: 100%
